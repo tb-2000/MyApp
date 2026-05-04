@@ -1,0 +1,2 @@
+# ignore service-principal file with password
+service-principal.json
