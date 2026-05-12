@@ -30,13 +30,13 @@ pipeline {
         
         stage('Publish') {
             steps {
-                powershell 'dotnet publish src\\DeinProjekt.Web\\DeinProjekt.Web.csproj --configuration Release --output publish --no-build'
+                powershell 'dotnet publish C:\\Users\\Tom\\vscode\\MyApp\\MyApp\\MyApp.csproj --configuration Release --output publish --no-build'
                 archiveArtifacts artifacts: 'publish/**', fingerprint: true
             }
         }
         
         stage('Deploy to Dev') {
-            when { branch 'develop' }
+            when { branch 'main' }
             steps {
                 withCredentials([usernamePassword(credentialsId: 'azure-sp-credentials',
                                   usernameVariable: 'AZURE_CLIENT_ID',
