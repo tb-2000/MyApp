@@ -1,0 +1,7 @@
+C:\ProgramData\Jenkins\.jenkins\workspace\MyApp-CICD_main\publish\MyApp.exe
+C:\ProgramData\Jenkins\.jenkins\workspace\MyApp-CICD_main\publish\appsettings.Development.json
+C:\ProgramData\Jenkins\.jenkins\workspace\MyApp-CICD_main\publish\appsettings.json
+C:\ProgramData\Jenkins\.jenkins\workspace\MyApp-CICD_main\publish\MyApp.dll
+C:\ProgramData\Jenkins\.jenkins\workspace\MyApp-CICD_main\publish\MyApp.deps.json
+C:\ProgramData\Jenkins\.jenkins\workspace\MyApp-CICD_main\publish\MyApp.runtimeconfig.json
+C:\ProgramData\Jenkins\.jenkins\workspace\MyApp-CICD_main\publish\MyApp.pdb
