@@ -24,13 +24,17 @@ pipeline {
         
         stage('Test') {
             steps {
-                powershell 'dotnet test --configuration Release --no-build'
+                powershell 'dotnet test --configuration Release --no-restore'
             }
         }
         
         stage('Publish') {
             steps {
-                powershell 'dotnet publish C:\\Users\\Tom\\vscode\\MyApp\\MyApp\\MyApp.csproj --configuration Release --output publish --no-build'
+                powershell '''
+                dotnet clean 
+                dotnet restore
+                dotnet publish C:\\Users\\Tom\\vscode\\MyApp\\MyApp\\MyApp.csproj --configuration Release --output publish --no-restore -p:BlazorEnableCompression=false
+                '''
                 archiveArtifacts artifacts: 'publish/**', fingerprint: true
             }
         }
