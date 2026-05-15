@@ -2,6 +2,7 @@ pipeline {
     agent any
     
     environment {
+        DOTNET_VERSION = '9.0'
         SUBSCRIPTION_ID = 'fe8af34a-02eb-4b77-9796-eee984bbad83'
         TENANT_ID = '0dba4b73-81df-44a7-9539-08ec0252d600'
         AZURE_CLI_PATH = 'C:\\Program Files\\Microsoft SDKs\\Azure\\CLI2\\wbin\\az.cmd'
@@ -14,47 +15,25 @@ pipeline {
             }
         }
         
-    stage('Setup Python & Dependencies') {
+        stage('Restore & Build') {
             steps {
-                powershell '''
-                    Write-Host "Python Version:"
-                    python --version
-                    
-                    # Virtuelle Umgebung
-                    python -m venv venv
-                    .\\venv\\Scripts\\Activate.ps1
-                    
-                    Write-Host "Installing dependencies..."
-                    pip install --upgrade pip
-                    pip install -r requirements.txt
-                '''
+                powershell 'dotnet restore'
+                powershell 'dotnet build --configuration Release --no-restore'
             }
         }
         
         stage('Test') {
             steps {
-                powershell '''
-                    .\\venv\\Scripts\\Activate.ps1
-                    
-                    pip install pytest pytest-cov
-                    
-                    Write-Host "Running tests..."
-                    python -m pytest --cov=. --cov-report=xml --junitxml=test-results.xml
-                '''
+                powershell 'dotnet test --configuration Release --no-restore'
             }
         }
         
-        stage('Package') {
+        stage('Publish') {
             steps {
                 powershell '''
-                    Write-Host "Preparing deployment package..."
-                    New-Item -ItemType Directory -Force -Path publish | Out-Null
-                    
-                    # Wichtige Dateien kopieren
-                    Copy-Item -Path *.py, requirements.txt, runtime.txt, Procfile -Destination publish -Recurse -ErrorAction SilentlyContinue
-                    Copy-Item -Path app, main.py, wsgi.py, asgi.py, templates, static -Destination publish -Recurse -ErrorAction SilentlyContinue
-                    
-                    Write-Host "Package ready."
+                dotnet clean 
+                dotnet restore
+                dotnet publish C:\\Users\\Tom\\vscode\\MyApp\\MyApp\\MyApp.csproj --configuration Release --output publish --no-restore -p:BlazorEnableCompression=false
                 '''
                 archiveArtifacts artifacts: 'publish/**', fingerprint: true
             }
